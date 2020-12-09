@@ -1,0 +1,131 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        RAM ram4gb = new RAM("Память DDR4, 4GB", 1500); //создание экземпляров товаров
+        RAM ram8gb = new RAM("Память DDR4, 8GB", 2500); //используется конструктор родительского класса
+        RAM ram16gb = new RAM("Память DDR4, 16GB", 4500);
+        RAM ram32gb = new RAM("Память DDR4, 32GB", 7000);
+
+        CPU i3 = new CPU("Процессор Intel i3", 8000);
+        CPU i5 = new CPU("Процессор Intel i5", 15000);
+        CPU i7 = new CPU("Процессор Intel i7", 25000);
+
+        Motherboard asus = new Motherboard("Материнская плата ASUS", 4000);
+        Motherboard gigabyte = new Motherboard("Материнская плата Gigabyte", 5000);
+        Motherboard msi = new Motherboard("Материнская плата MSI", 7000);
+
+        Keyboard oklick = new Keyboard("Клавиатура OKLICK", 700);
+        Keyboard logitechKeyboard = new Keyboard("Клавиатура Logitech", 1000);
+        Keyboard a4Keyboard = new Keyboard("Клавиатура A4 Tech", 1500);
+
+        Mouse logitechMouse = new Mouse("Мышь Logitech", 500);
+        Mouse a4Mouse = new Mouse("Мышь A4 Tech", 1000);
+
+        Monitor samsung = new Monitor("Монитор Samsung", 7500);
+        Monitor lg = new Monitor("Монитор LG", 10000);
+
+        Part[] RAMs = {ram4gb, ram8gb, ram16gb, ram32gb}; //создание массивов товаров по группам
+        Part[] CPUs = {i3, i5, i7};
+        Part[] Motherboards = {asus, gigabyte, msi};
+        Part[] Keyboards = {oklick, logitechKeyboard, a4Keyboard};
+        Part[] Mouses = {logitechMouse, a4Mouse};
+        Part[] Monitors = {samsung, lg};
+
+        ArrayList<Part> parts = new ArrayList<>(); //создание ArrayList для более удобного выбранных добавления товаров
+
+        parts.add(chooseParts(RAMs)); //добавление выбранного товара группы в "корзину"
+        parts.add(chooseParts(CPUs));
+        parts.add(chooseParts(Motherboards));
+        parts.add(chooseParts(Keyboards));
+        parts.add(chooseParts(Mouses));
+        parts.add(chooseParts(Monitors));
+        int sum = 0; //сумма покупки
+        System.out.println("Вы выбрали:");
+        for (Part part : parts) { //использование цикла foreach для списка parts
+            System.out.println(part.toString()); //вывод каждого выбранного товара с новой строки
+            sum += part.price; //подсчет суммы выбранных товаров
+        }
+        System.out.println("Общая сумма: " + sum + "р."); //вывод суммы в конце
+    }
+
+    public static Part chooseParts(Part[] parts) {
+        int a; //создание переменной для использования в качестве индекса массива
+        do { //использование цикла do-while для вывода элементов массива
+            System.out.println("Выберите товар и введите его номер в консоль:");
+            for (int i = 0; i < parts.length; i++) { //использование цикла for для перебора элементов массива
+                System.out.print(i + 1 + ". "); // нумерация элементов при выводе на экран
+                System.out.println(parts[i].toString()); //вывод информации о товаре
+            }
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); //создание потока ввода
+            try { //обработка исключений
+                a = Integer.parseInt(reader.readLine()); //считывание номера товара из консоли
+            } catch (NumberFormatException e) { // проверка ввода на соответствие типа данных
+                System.out.println("Проверьте правильность ввода.");
+                a = 0; //инициализация, если введено не целое число
+            } catch (IOException e) { //обработка стандартного исключения ввода/вывода
+                e.printStackTrace();
+                a = 0; //инициализация
+            }
+        }
+        while (!((a > 0) && (a <= parts.length))); //запрос возникает заново, если введено некорректное число
+        return parts[a - 1]; //возвращает выбранный товар
+    }
+
+    public static class Part { //создание общего класса, для наследование всеми компонентами
+        String name; //создание переменных
+        int price;
+
+        public Part(String name, int price) { //создание конструктора
+            this.name = name;
+            this.price = price;
+        }
+
+        public String toString() { //переопределение метода toString
+            return this.name + ", цена: " + this.price + "р.";
+        }
+    }
+
+    public static class RAM extends Part {        //создание классов для каждой категории товаров
+        public RAM(String name, int price) {      //все они наследуются от класса Part
+            super(name, price);
+        }
+    }
+
+    public static class CPU extends Part {
+        public CPU(String name, int price) {
+            super(name, price);
+        }
+    }
+
+    public static class Motherboard extends Part {
+        public Motherboard(String name, int price) {
+            super(name, price);
+        }
+    }
+
+    public static class Keyboard extends Part {
+        public Keyboard(String name, int price) {
+            super(name, price);
+        }
+    }
+
+    public static class Mouse extends Part {
+        public Mouse(String name, int price) {
+            super(name, price);
+        }
+    }
+
+    public static class Monitor extends Part {
+        public Monitor(String name, int price) {
+            super(name, price);
+        }
+    }
+}
+
+
